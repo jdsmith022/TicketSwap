@@ -2,22 +2,10 @@
 
 namespace TicketSwap\Assessment;
 
-final class Barcode
+final class Barcode implements \Stringable
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    public function __construct(string $type, string $value)
+    public function __construct(private string $type, private string $value)
     {
-        $this->type = $type;
-        $this->value = $value;
     }
 
     public function __toString() : string

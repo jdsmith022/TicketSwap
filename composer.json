@@ -3,8 +3,8 @@
     "description": "TicketSwap assessment",
     "type": "project",
     "require": {
-        "phpunit/phpunit": "^7.3",
-        "moneyphp/money": "^3.1"
+        "phpunit/phpunit": "^9.5",
+        "moneyphp/money": "^3.3"
     },
     "authors": [
         {

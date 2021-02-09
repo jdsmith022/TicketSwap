@@ -2,16 +2,10 @@
 
 namespace TicketSwap\Assessment;
 
-final class Seller
+final class Seller implements \Stringable
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    public function __construct(string $name)
+    public function __construct(private string $name)
     {
-        $this->name = $name;
     }
 
     public function __toString() : string

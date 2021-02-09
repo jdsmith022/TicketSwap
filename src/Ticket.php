@@ -4,26 +4,8 @@ namespace TicketSwap\Assessment;
 
 final class Ticket
 {
-    /**
-     * @var TicketId
-     */
-    private $id;
-
-    /**
-     * @var Barcode
-     */
-    private $barcode;
-
-    /**
-     * @var Buyer|null
-     */
-    private $buyer;
-
-    public function __construct(TicketId $id, Barcode $barcode, ?Buyer $buyer = null)
+    public function __construct(private TicketId $id, private Barcode $barcode, private ?Buyer $buyer = null)
     {
-        $this->id = $id;
-        $this->barcode = $barcode;
-        $this->buyer = $buyer;
     }
 
     public function getId() : TicketId

@@ -10,7 +10,7 @@ The business rules are as follows:
 - A listing contains multiple tickets. 
 - Tickets can contain multiple barcodes.
 - Sellers can create listings with tickets.
-- Buyers can buy invididual tickets from a listing.
+- Buyers can buy individual tickets from a listing.
 - Once all tickets have been sold for a listing, it is no longer for sale.
 - It should not be possible to create a listing with duplicate barcodes in it.
 - It should not be possible to create a listing with duplicate barcodes within another listing.
@@ -23,7 +23,7 @@ If you have any questions you can always [contact us][contact].
 We know some sellers have nefarious plans and try to scam buyers. To prevent that, we want to only sell listings that have been verified by an admin. Make the implementation, and the accompanying unit tests, to be able to verify listings and only buy tickets from verified listings.
 
 ## Setup
-First of all, it is assumed that you can run PHP (7.2+) and composer locally.
+First of all, it is assumed that you can run PHP (8.0+) and composer locally.
 
 ### Download repository
 You can download/clone the repo to your local machine and follow the next instructions to get everything up and running.

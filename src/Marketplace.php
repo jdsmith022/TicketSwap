@@ -5,15 +5,15 @@ namespace TicketSwap\Assessment;
 final class Marketplace
 {
     /**
-     * @var array
+     * @param array<Listing> $listingsForSale
      */
-    private $listingsForSale;
-
-    public function __construct(array $listingsForSale = [])
+    public function __construct(private array $listingsForSale = [])
     {
-        $this->listingsForSale = $listingsForSale;
     }
 
+    /**
+     * @return array<Listing>
+     */
     public function getListingsForSale() : array
     {
         return $this->listingsForSale;

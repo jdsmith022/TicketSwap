@@ -7,31 +7,14 @@ use Money\Money;
 final class Listing
 {
     /**
-     * @var ListingId
+     * @param array<Ticket> $tickets
      */
-    private $id;
-
-    /**
-     * @var Seller
-     */
-    private $seller;
-
-    /**
-     * @var array
-     */
-    private $tickets;
-
-    /**
-     * @var Money
-     */
-    private $price;
-
-    public function __construct(ListingId $id, Seller $seller, array $tickets, Money $price)
-    {
-        $this->id = $id;
-        $this->seller = $seller;
-        $this->tickets = $tickets;
-        $this->price = $price;
+    public function __construct(
+        private ListingId $id,
+        private Seller $seller,
+        private array $tickets,
+        private Money $price
+    ) {
     }
 
     public function getId() : ListingId
@@ -44,6 +27,9 @@ final class Listing
         return $this->seller;
     }
 
+    /**
+     * @return array<Ticket>
+     */
     public function getTickets(?bool $forSale = null) : array
     {
         if (true === $forSale) {

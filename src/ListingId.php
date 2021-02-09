@@ -2,16 +2,10 @@
 
 namespace TicketSwap\Assessment;
 
-final class ListingId
+final class ListingId implements \Stringable
 {
-    /**
-     * @var string
-     */
-    private $id;
-
-    public function __construct(string $id)
+    public function __construct(private string $id)
     {
-        $this->id = $id;
     }
 
     public function __toString() : string
