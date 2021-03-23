@@ -2,11 +2,6 @@
 
 namespace TicketSwap\Assessment;
 
-use TicketSwap\Assessment\Listing;
-use TicketSwap\Assessment\Buyer;
-use TicketSwap\Assessment\TicketId;
-use TicketSwap\Assessment\Barcode;
-
 final class Ticket
 {
     public function __construct(private TicketId $id, private Barcode $barcode, private ?Buyer $buyer = null)

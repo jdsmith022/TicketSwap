@@ -2,11 +2,6 @@
 
 namespace TicketSwap\Assessment;
 
-use TicketSwap\Assessment\Buyer;
-use TicketSwap\Assessment\TicketId;
-use TicketSwap\Assessment\Listing;
-use TicketSwap\Assessment\Ticket;
-
 final class Marketplace
 {
     /**
@@ -27,19 +22,23 @@ final class Marketplace
 
     public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
     {
-        foreach($this->listingsForSale as $listing) {
-            foreach($listing->getTickets() as $ticket) {
-                if ($ticket->getId()->equals($ticketId)) {
-                    $ticketBought = $ticket->buyTicket($buyer);
-                    //remove ticket from listing
-                    $ticket->deleteTicket($ticket);
-                    //if listing is empty, delete listing
-                    if ($listing->getTickets() === null) {
-                        $listing->deleteListing($listing);
+        try {
+            foreach($this->listingsForSale as $listing) {
+                foreach($listing->getTickets() as $ticket) {
+                    if ($ticket->getId()->equals($ticketId)) {
+                        $ticketBought = $ticket->buyTicket($buyer);
+                        //remove ticket from listing
+                        $ticket->deleteTicket($ticket);
+                        //if listing is empty, delete listing
+                        if ($listing->getTickets() === null) {
+                            $listing->deleteListing($listing);
+                        }
+                        return $ticketBought;
                     }
-                    return $ticketBought;
                 }
             }
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
         }
     }
 
@@ -47,19 +46,25 @@ final class Marketplace
      * First setListingForSale checks that a ticket with the same id of as the new Listing does not
      * exist in the current Listing. If it does, the new Listing is not added to the Listing, else
      * the new Listing is pushed to the current Listing */
-    public function setListingForSale(Listing $listing) : void
+    public function setListingForSale(Listing $newListingForSale) : void
     {
-        foreach($this->listingsForSale as $currentlisting) {
-            foreach($currentlisting->getTickets() as $ticket) {
-                //if new Listing ticket id equals a ticket id already in the Listing, ticket can't be sold, return Listing as is
-                foreach($listing->getTickets() as $newTicket) {
-                    if ($ticket->getId()->equals($newTicket->getId())) {
-                        return ;
+        $newListingSeller = $newListingForSale ->getSeller();
+        foreach($this->listingsForSale as $currentListingForSale) {
+            foreach($currentListingForSale->getTickets() as $currentListingTicket) {
+                foreach($newListingForSale->getTickets() as $newListingTicket) {
+                    if ((string)$currentListingTicket->getBarcode() === (string)$newListingTicket->getBarcode()) {
+                        if (!$currentListingTicket->isBought()) {
+                            return ;
+                        } else {
+                            if ($newListingSeller != $currentListingTicket->getBuyer()) {
+                                return ;
+                            }
+                        }
                     }
                 }
             }
         }
-        array_push($this->listingsForSale, $listing);
+        array_push($this->listingsForSale, $newListingForSale);
         return ;
     }
 }

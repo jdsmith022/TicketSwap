@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "phpunit/phpunit": "^9.5",
-        "moneyphp/money": "^3.3"
+        "moneyphp/money": "^3.3",
+        "symfony/monolog-bundle": "^3.6"
     },
     "authors": [
         {

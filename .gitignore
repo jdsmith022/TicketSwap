@@ -350,4 +350,5 @@ MigrationBackup/
 .ionide/
 /vendor/
 .DS_Store
-/debug_logs
+/tests/debug_logs/
+/src/debug_logs/
