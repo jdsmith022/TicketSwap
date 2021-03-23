@@ -93,7 +93,6 @@ class ListingTest extends TestCase
             seller: new Seller('Pascal'),
         );
 
-        
         $ticketsNotForSale = $listing->getTickets(false);
 
         $this->assertCount(1, $ticketsNotForSale);

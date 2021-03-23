@@ -2,10 +2,18 @@
 
 namespace TicketSwap\Assessment;
 
+use TicketSwap\Assessment\Listing;
+use TicketSwap\Assessment\Buyer;
+use TicketSwap\Assessment\TicketId;
+use TicketSwap\Assessment\Barcode;
+
 final class Ticket
 {
     public function __construct(private TicketId $id, private Barcode $barcode, private ?Buyer $buyer = null)
     {
+        $this->id = $id;
+        $this->barcode = $barcode;
+        $this->buyer = $buyer;
     }
 
     public function getId() : TicketId
@@ -33,5 +41,10 @@ final class Ticket
         $this->buyer = $buyer;
 
         return $this;
+    }
+
+    public function deleteTicket(Ticket $ticket) : void
+    {
+       unset($ticket);
     }
 }

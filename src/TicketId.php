@@ -6,6 +6,7 @@ final class TicketId implements \Stringable
 {
     public function __construct(private string $id)
     {
+        $this->id = $id;
     }
 
     public function __toString() : string
