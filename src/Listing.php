@@ -28,11 +28,13 @@ final class Listing
     public function checkBarcodes() : bool {
         $ticketBarcodes = [];
         foreach ($this->tickets as $ticket) {
-            $barcode = (string)$ticket->getBarcode();
-            foreach ($ticketBarcodes as $code) {
-                if ($code === $barcode) {
-                    $this->tickets = [];
-                    return FALSE;
+            $barcodes = $ticket->getBarcodes();
+            foreach ($barcodes as $barcode) {
+                foreach ($ticketBarcodes as $code) {
+                    if ($code === (string)$barcode) {
+                        $this->tickets = [];
+                        return FALSE;
+                    }
                 }
             }
             array_push($ticketBarcodes, $barcode);
@@ -53,8 +55,7 @@ final class Listing
     /**
      * @return array<Ticket>
      *
-     * Depending on bool value given as function paramenter, an array of either for sale tickets,
-     * not for sale tickets, or all tickets are returned
+     * Depending on bool value given, an array of either forSaleTickets, notForSaleTickets, or all tickets are returned
      */
     public function getTickets(?bool $forSale = null) : array
     {

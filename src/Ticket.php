@@ -4,10 +4,10 @@ namespace TicketSwap\Assessment;
 
 final class Ticket
 {
-    public function __construct(private TicketId $id, private Barcode $barcode, private ?Buyer $buyer = null)
+    public function __construct(private TicketId $id,  private ?Buyer $buyer = null, private array $barcodes)
     {
         $this->id = $id;
-        $this->barcode = $barcode;
+        $this->barcodes = $barcodes;
         $this->buyer = $buyer;
     }
 
@@ -16,9 +16,13 @@ final class Ticket
         return $this->id;
     }
 
-    public function getBarcode() : Barcode
+    public function getBarcodes() : Array
     {
-        return $this->barcode;
+        $barcodeArray = [];
+        foreach($this->barcodes as $barcode) {
+            array_push($barcodeArray, (string)$barcode);
+        }
+        return $barcodeArray;
     }
 
     public function getBuyer() : Buyer
@@ -38,8 +42,8 @@ final class Ticket
         return $this;
     }
 
-    public function deleteTicket(Ticket $ticket) : void
-    {
-       unset($ticket);
+    public function isResell() : void {
+        $this->buyer = null;
+        // return $this->buyer;
     }
 }

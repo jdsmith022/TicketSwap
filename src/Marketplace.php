@@ -3,6 +3,7 @@
 namespace TicketSwap\Assessment;
 
 final class Marketplace
+
 {
     /**
      * @param array<Listing> $listingsForSale
@@ -12,54 +13,78 @@ final class Marketplace
         $this->listingsForSale = $listingsForSale;
     }
 
-    /**
-     * @return array<Listing>
+    /** Checks listings that are for sale and sets as bought
+     *
+     * Finds ticket in listing available for sale by matching ticket ids
+     * throws exception error if: ticket is already bought and buyer is trying to buy own ticket
      */
-    public function getListingsForSale() : array
-    {
-        return $this->listingsForSale;
-    }
-
     public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
     {
+        $ticketAlreadySoldException = new TicketAlreadySoldException();
         try {
-            foreach($this->listingsForSale as $listing) {
+            $listingsForSale = $this->getListingsForSale();
+            if (!$listingsForSale) {
+                $soldTicket = $this->findSoldTicket($ticketId);
+                throw $ticketAlreadySoldException->withTicket($soldTicket);
+            }
+            foreach($listingsForSale as $listing) {
                 foreach($listing->getTickets() as $ticket) {
-                    if ($ticket->getId()->equals($ticketId) && !$ticket->isBought()) {
+                    if ($ticket->getId()->equals($ticketId) && (string)$buyer != (string)$listing->getSeller()) {
                         $ticketBought = $ticket->buyTicket($buyer);
-                        //remove ticket from listing
-                        $ticket->deleteTicket($ticket);
-                        //if listing is empty, delete listing
-                        if ($listing->getTickets() === null) {
-                            $listing->deleteListing($listing);
-                        }
                         return $ticketBought;
-                    } else {
-                        $ticketAlreadySoldException = new TicketAlreadySoldException();
+                    } else if ($ticket->getId()->equals($ticketId) && (string)$buyer == (string)$listing->getSeller())  {
                         throw $ticketAlreadySoldException->withTicket($ticket);
                     }
                 }
             }
         } catch (TicketAlreadySoldException $e) {
-            throw $e->withTicket($ticket);
+            throw new ticketAlreadySoldException($e);
         }
     }
 
-    /** Pushes new Listing to contructed Listing if the ticket isn't already being sold
-     * First setListingForSale checks that a ticket with the same barcode of as the new Listing does not
-     * exist in the listings. If it does, the new Listing is not added to the Listing, else
+
+    /**
+     * @return array<Listing>
+     * Returns array of only listings that have tickets available to sell
+     */
+    public function getListingsForSale() : array
+    {
+        $unsoldListings = [];
+        foreach($this->listingsForSale as $listing) {
+            if ($listing->getTickets(true)) {
+                array_push($unsoldListings, $listing);
+            }
+        }
+        return $unsoldListings;
+    }
+
+
+    public function findSoldTicket(TicketId $ticketId) : Ticket
+    {
+        foreach($this->listingsForSale as $listing) {
+            foreach($listing->getTickets(false) as $ticket) {
+                if ($ticket->getId()->equals($ticketId)) {
+                    return $ticket;
+                }
+            }
+        }
+    }
+
+    /** Pushes new Listing to current Listing if the ticket isn't already being sold
+     *
+     * First setListingForSale checks that a ticket with the same barcode as the new Listing does not
+     * exist in the current Listing. If it does, the new Listing is not added to the current Listing, else
      * the new Listing is pushed to the current Listing */
     public function setListingForSale(Listing $newListingForSale) : void
     {
-        $newListingSeller = $newListingForSale ->getSeller();
         foreach($this->listingsForSale as $currentListingForSale) {
-            foreach($currentListingForSale->getTickets() as $currentListingTicket) {
+            foreach($currentListingForSale->getTickets(true) as $currentListingTicket) {
                 foreach($newListingForSale->getTickets() as $newListingTicket) {
-                    if ((string)$currentListingTicket->getBarcode() === (string)$newListingTicket->getBarcode()) {
-                        if (!$currentListingTicket->isBought()) {
-                            return ;
-                        } else {
-                            if ($newListingSeller != $currentListingTicket->getBuyer()) {
+                    $currentBarcodes = $currentListingTicket->getBarcodes();
+                    $newBarcodes = $newListingTicket->getBarcodes();
+                    foreach ($currentBarcodes as $currentBarcode) {
+                        foreach ($newBarcodes as $newBarcode) {
+                            if ((string)$currentBarcode === (string)$newBarcode) {
                                 return ;
                             }
                         }
