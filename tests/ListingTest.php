@@ -46,7 +46,6 @@ class ListingTest extends TestCase
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                     new Barcode('EAN-13', '38974312923'),
-                    new Buyer('Jane')
                 ),
                 new Ticket(
                     new TicketId('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA'),
@@ -57,7 +56,6 @@ class ListingTest extends TestCase
             seller: new Seller('Pascal'),
         );
         $ticketsForSale = $listing->getTickets(true);
-        //no listing should be made as barcodes to both tickets are the same
         $this->assertCount(0, $ticketsForSale);
     }
 
@@ -89,7 +87,7 @@ class ListingTest extends TestCase
         $this->assertSame('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA', (string) $ticketsForSale[0]->getId());
     }
 
-        /**
+    /**
      * @test
      */
     public function it_should_list_the_tickets_not_for_sale()

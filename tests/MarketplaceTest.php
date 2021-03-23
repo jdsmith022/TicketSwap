@@ -79,6 +79,7 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_be_possible_to_buy_the_same_ticket_twice()
     {
+        $this->expectException(TicketAlreadySoldException::class);
         $marketplace = new Marketplace(
             listingsForSale: [
                 new Listing(
@@ -108,7 +109,6 @@ class MarketplaceTest extends TestCase
         );
         // $this->assertNull($boughtTicket);
         // $this->assertSame('EAN-13:38974312923', (string) $boughtTicket->getBarcode());
-        $this->expectException(TicketAlreadySoldException::class);
     }
 
     /**
@@ -172,7 +172,6 @@ class MarketplaceTest extends TestCase
                     ]
             );
 
-        //needs to check first is listing exists based on barcode
         $marketplace->setListingForSale(
             new Listing(
                 id: new ListingId('26A7E5C4-3F59-4B3C-B5EB-6F2718BC31AD'),
@@ -188,8 +187,6 @@ class MarketplaceTest extends TestCase
         );
 
         $listingsForSale = $marketplace->getListingsForSale();
-
-        //should only return one ticket for sale
         $this->assertCount(1, $listingsForSale);
     }
 

@@ -18,6 +18,13 @@ final class Listing
         }
     }
 
+      /**
+     * @return bool
+     *
+     * Called from class construct, checkBarcodes checks if the barcodes of each ticket of the new
+     * listing are unique. If there are any matching barcodes, false is returned and the listing is
+     * not constructed.
+     */
     public function checkBarcodes() : bool {
         $ticketBarcodes = [];
         foreach ($this->tickets as $ticket) {
@@ -45,6 +52,9 @@ final class Listing
 
     /**
      * @return array<Ticket>
+     *
+     * Depending on bool value given as function paramenter, an array of either for sale tickets,
+     * not for sale tickets, or all tickets are returned
      */
     public function getTickets(?bool $forSale = null) : array
     {
