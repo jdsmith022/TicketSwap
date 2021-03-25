@@ -1,5 +1,5 @@
-# TicketSwap_assignment
-# TicketSwap assessment
+# TicketSwap
+
 Your assignment is to implement a new marketplace system for selling and buying tickets. Some tests are already written and there is a basic implementation for you to finish. Even though it is not real code, please treat it as if it would be deployed to thousands of users.
 
 There are some concrete classes for implementation and there are some unit tests. Your job is to:
